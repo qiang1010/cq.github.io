@@ -1,428 +1,190 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Cache-Control" content="no-siteapp">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-    
-    <meta name="renderer" content="webkit"/>
-    <meta name="force-rendering" content="webkit"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <script>if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); </script>
-    
-    
-        <link rel="preload" crossorigin="crossorigin" href="/fonts/roboto/Roboto-Regular.woff2" as="font">
-        <link rel="preload" crossorigin="crossorigin" href="/fonts/roboto/Roboto-Bold.woff2" as="font">
-    
-    
-    
-        <link rel="shortcut icon" href="/icons/favicon.ico">
-    
-    
-    
-<link rel="stylesheet" href="/css/mdui.min.css">
-<link rel="stylesheet" href="/css/main.css">
-<link rel="stylesheet" href="/css/iconfont.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
 
     
+      <link rel="icon" href="/favicon.png" />
     
 
-    
-        <script data-ad-client="ca-" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    
-
-
-
-
-
-
-
-
-
-
-
-
-          
-
-
-    
-    
     <title>
         
-            手写Promise | 笔记
+          手写Promise - 笔记
         
     </title>
+
+    <!-- Spectre.css framework -->
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
+
+    <!-- theme css & js -->
+    
+<link rel="stylesheet" href="/css/book.css">
+
+    
+<script src="/js/book.js"></script>
+
+
+    <!-- tocbot -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.4.2/tocbot.css">
+    
+    <!-- katex -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+
     
     
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zooming/2.1.1/zooming.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const zooming = new Zooming()
+    zooming.listen('.book-content img')
+})
+</script>
+
 <meta name="generator" content="Hexo 4.2.1"></head>
-<body class="mdui-drawer-body-left mdui-appbar-with-toolbar mdui-theme-primary-teal mdui-theme-accent-blue">
+
+<body>
+
+<div class="book-container">
+  <div class="book-sidebar">
+    <div class="book-brand">
+  <a href="/">
+    <img src="/favicon.png">
+    <span>笔记</span>
+  </a>
+</div>
+    <div class="book-menu">
   
-  <header class="mdui-appbar mdui-appbar-fixed">
-  <div id="toolbar" class="mdui-toolbar mdui-color-theme">
-    <button class="mdui-btn mdui-btn-icon" mdui-drawer="{target: '#sidebar', swipe: true}"><i class="iconfont icon-menu"></i></button>
-    <a href="/" class="mdui-typo-headline">笔记</a>
-    <a href="/" class="header-subtitle mdui-typo-headline">海阔凭鱼跃，天高任鸟飞</a>
-    <div class="mdui-toolbar-spacer"></div>
-    <button class="mdui-btn mdui-btn-icon" mdui-dialog="{target: '#search'}" mdui-tooltip="{content: 'search'}"><i class="iconfont icon-search"></i></button>
+</div>
+
+
+<script src="/js/book-menu.js"></script>
+
   </div>
+
+  <div class="sidebar-toggle" onclick="sidebar_toggle()" onmouseover="add_inner()" onmouseleave="remove_inner()">
+  <div class="sidebar-toggle-inner"></div>
+</div>
+
+<script>
+function add_inner() {
+  let inner = document.querySelector('.sidebar-toggle-inner')
+  inner.classList.add('show')  
+}
+
+function remove_inner() {
+  let inner = document.querySelector('.sidebar-toggle-inner')
+  inner.classList.remove('show')
+}
+
+function sidebar_toggle() {
+    let sidebar_toggle = document.querySelector('.sidebar-toggle')
+    let sidebar = document.querySelector('.book-sidebar')
+    let content = document.querySelector('.off-canvas-content')
+    if (sidebar_toggle.classList.contains('extend')) { // show
+        sidebar_toggle.classList.remove('extend')
+        sidebar.classList.remove('hide')
+        content.classList.remove('extend')
+    }
+    else { // hide
+        sidebar_toggle.classList.add('extend')
+        sidebar.classList.add('hide')
+        content.classList.add('extend')
+    }
+}
+</script>
+
+  <div class="off-canvas-content">
+    <div class="columns">
+      <div class="column col-10 col-lg-12">
+        <div class="book-navbar">
+          <!-- For Responsive Layout -->
+
+<header class="navbar">
+  <section class="navbar-section">
+    <a onclick="open_sidebar()">
+      <i class="icon icon-menu"></i>
+    </a>
+  </section>
 </header>
 
-<div class="mdui-dialog" id="search">
-  
-    <div class="search-form">
-      <input type="search" class="search-form-input" placeholder="请输入关键字" onfocus="listenSearchFunc()">
-    </div>
-    <div class="search-result" data-resource="/search.xml"></div>
-  
+        </div>
+        <div class="book-content">
+          <div class="book-post">
+  <h2 id="史上最最最详细的手写Promise教程"><a href="#史上最最最详细的手写Promise教程" class="headerlink" title="史上最最最详细的手写Promise教程"></a>史上最最最详细的手写Promise教程</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line">class Promise&#123;</span><br><span class="line">  constructor(executor)&#123;</span><br><span class="line">    this.state &#x3D; &#39;pending&#39;;</span><br><span class="line">    this.value &#x3D; undefined;</span><br><span class="line">    this.reason &#x3D; undefined;</span><br><span class="line">    this.onResolvedCallbacks &#x3D; [];</span><br><span class="line">    this.onRejectedCallbacks &#x3D; [];</span><br><span class="line">    let resolve &#x3D; value &#x3D;&gt; &#123;</span><br><span class="line">      if (this.state &#x3D;&#x3D;&#x3D; &#39;pending&#39;) &#123;</span><br><span class="line">        this.state &#x3D; &#39;fulfilled&#39;;</span><br><span class="line">        this.value &#x3D; value;</span><br><span class="line">        this.onResolvedCallbacks.forEach(fn&#x3D;&gt;fn());</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    let reject &#x3D; reason &#x3D;&gt; &#123;</span><br><span class="line">      if (this.state &#x3D;&#x3D;&#x3D; &#39;pending&#39;) &#123;</span><br><span class="line">        this.state &#x3D; &#39;rejected&#39;;</span><br><span class="line">        this.reason &#x3D; reason;</span><br><span class="line">        this.onRejectedCallbacks.forEach(fn&#x3D;&gt;fn());</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    try&#123;</span><br><span class="line">      executor(resolve, reject);</span><br><span class="line">    &#125; catch (err) &#123;</span><br><span class="line">      reject(err);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  then(onFulfilled,onRejected) &#123;</span><br><span class="line">    &#x2F;&#x2F; onFulfilled如果不是函数，就忽略onFulfilled，直接返回value</span><br><span class="line">    onFulfilled &#x3D; typeof onFulfilled &#x3D;&#x3D;&#x3D; &#39;function&#39; ? onFulfilled : value &#x3D;&gt; value;</span><br><span class="line">    &#x2F;&#x2F; onRejected如果不是函数，就忽略onRejected，直接扔出错误</span><br><span class="line">    onRejected &#x3D; typeof onRejected &#x3D;&#x3D;&#x3D; &#39;function&#39; ? onRejected : err &#x3D;&gt; &#123; throw err &#125;;</span><br><span class="line">    let promise2 &#x3D; new Promise((resolve, reject) &#x3D;&gt; &#123;</span><br><span class="line">      if (this.state &#x3D;&#x3D;&#x3D; &#39;fulfilled&#39;) &#123;</span><br><span class="line">        &#x2F;&#x2F; 异步</span><br><span class="line">        setTimeout(() &#x3D;&gt; &#123;</span><br><span class="line">          try &#123;</span><br><span class="line">            let x &#x3D; onFulfilled(this.value);</span><br><span class="line">            resolvePromise(promise2, x, resolve, reject);</span><br><span class="line">          &#125; catch (e) &#123;</span><br><span class="line">            reject(e);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;, 0);</span><br><span class="line">      &#125;;</span><br><span class="line">      if (this.state &#x3D;&#x3D;&#x3D; &#39;rejected&#39;) &#123;</span><br><span class="line">        &#x2F;&#x2F; 异步</span><br><span class="line">        setTimeout(() &#x3D;&gt; &#123;</span><br><span class="line">          &#x2F;&#x2F; 如果报错</span><br><span class="line">          try &#123;</span><br><span class="line">            let x &#x3D; onRejected(this.reason);</span><br><span class="line">            resolvePromise(promise2, x, resolve, reject);</span><br><span class="line">          &#125; catch (e) &#123;</span><br><span class="line">            reject(e);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;, 0);</span><br><span class="line">      &#125;;</span><br><span class="line">      if (this.state &#x3D;&#x3D;&#x3D; &#39;pending&#39;) &#123;</span><br><span class="line">        this.onResolvedCallbacks.push(() &#x3D;&gt; &#123;</span><br><span class="line">          &#x2F;&#x2F; 异步</span><br><span class="line">          setTimeout(() &#x3D;&gt; &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">              let x &#x3D; onFulfilled(this.value);</span><br><span class="line">              resolvePromise(promise2, x, resolve, reject);</span><br><span class="line">            &#125; catch (e) &#123;</span><br><span class="line">              reject(e);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;, 0);</span><br><span class="line">        &#125;);</span><br><span class="line">        this.onRejectedCallbacks.push(() &#x3D;&gt; &#123;</span><br><span class="line">          &#x2F;&#x2F; 异步</span><br><span class="line">          setTimeout(() &#x3D;&gt; &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">              let x &#x3D; onRejected(this.reason);</span><br><span class="line">              resolvePromise(promise2, x, resolve, reject);</span><br><span class="line">            &#125; catch (e) &#123;</span><br><span class="line">              reject(e);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;, 0)</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;);</span><br><span class="line">    &#x2F;&#x2F; 返回promise，完成链式</span><br><span class="line">    return promise2;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </div>
 
-  <aside id="sidebar" class="mdui-drawer">
-    <div class="mdui-tab" mdui-tab>
-        <a href="#sidebar-tab1" id="sidebartab" class="mdui-ripple mdui-tab-active">站点概览</a>
-        <a href="#sidebar-tab2" id="sidebartab" class="mdui-ripple">关于</a>
-    </div>
 
+  <div class="book-comments">
     
-    <div id="sidebar-tab1" class="mdui-p-a-2">
-        <div class="mdui-list">
-            
-                
-                <a href="/" class="mdui-list-item mdui-ripple">
-                    <div class="mdui-list-item-icon">
-                        <i class="iconfont icon-home"></i>
-                    </div>
-                    <div class="mdui-list-item-content">主页</div>
-                </a>
-            
-                
-                <a href="/tags/" class="mdui-list-item mdui-ripple">
-                    <div class="mdui-list-item-icon">
-                        <i class="iconfont icon-bookmark"></i>
-                    </div>
-                    <div class="mdui-list-item-content">标签</div>
-                </a>
-            
-                
-                <a href="/categories/" class="mdui-list-item mdui-ripple">
-                    <div class="mdui-list-item-icon">
-                        <i class="iconfont icon-folder"></i>
-                    </div>
-                    <div class="mdui-list-item-content">分类</div>
-                </a>
-            
-                
-                <a href="/archives/" class="mdui-list-item mdui-ripple">
-                    <div class="mdui-list-item-icon">
-                        <i class="iconfont icon-archive"></i>
-                    </div>
-                    <div class="mdui-list-item-content">归档</div>
-                </a>
-            
-                
-                <a href="/tools/" class="mdui-list-item mdui-ripple">
-                    <div class="mdui-list-item-icon">
-                        <i class="iconfont icon-tools"></i>
-                    </div>
-                    <div class="mdui-list-item-content">工具箱</div>
-                </a>
-            
-                
-                <a href="/about/" class="mdui-list-item mdui-ripple">
-                    <div class="mdui-list-item-icon">
-                        <i class="iconfont icon-user"></i>
-                    </div>
-                    <div class="mdui-list-item-content">关于</div>
-                </a>
-            
-            <div class="mdui-list-item mdui-ripple">
-                <div class="mdui-list-item-icon">
-                    <i class="iconfont icon-moon"></i>
-                </div>
-                <div class="mdui-list-item-content">夜间模式</div>
-                <label class="mdui-switch" id="darkmode">
-                  <input type="checkbox" id="nightmode_switch"/>
-                  <i class="mdui-switch-icon"></i>
-                </label>
-            </div>           
+
+
+
+
+  </div>
+
+
+
+<script src="/js/book-post.js"></script>
+
         </div>
-    </div>
-
-    
-    <div id="sidebar-tab2" class="mdui-p-a-2">
-        <div class="sidebar-overview">
-            <div class="sidebar-avatar">
-                
-                    <img src="/icons/avatar.gif"/>
-                
-            </div>
-            <div class="sidebar-author-name">强哥</div>
-            <div class="sidebar-description">知识点整理</div>
-        </div>
-        <div class="sidebar-links">
-            
-                
-                <div class="mdui-chip">
-                    <span class="mdui-chip-icon"><i class="iconfont icon-mail"></i></span>
-                    <a href="mailto:xxx@xxx.com" class="mdui-chip-title">E-Mail</a>
-                </div>
-            
-                
-                <div class="mdui-chip">
-                    <span class="mdui-chip-icon"><i class="iconfont icon-github"></i></span>
-                    <a href="https://your.url" target="_blank" rel="noopener" class="mdui-chip-title">GitHub</a>
-                </div>
-            
-                
-                <div class="mdui-chip">
-                    <span class="mdui-chip-icon"><i class="iconfont icon-steam"></i></span>
-                    <a href="https://your.url" target="_blank" rel="noopener" class="mdui-chip-title">Steam</a>
-                </div>
-            
-                
-                <div class="mdui-chip">
-                    <span class="mdui-chip-icon"><i class="iconfont icon-weibo"></i></span>
-                    <a href="https://your.url" target="_blank" rel="noopener" class="mdui-chip-title">Weibo</a>
-                </div>
-            
-        </div>
-        <ul class="mdui-list" mdui-collapse="{accordion: true}">
-            <li class="mdui-collapse-item">
-                <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
-                    <div class="mdui-list-item-icon">
-                        <i class="iconfont icon-link"></i>
-                    </div>
-                    <div class="mdui-list-item-content">友情链接</div>
-                    <div class="mdui-collapse-item-arrow">
-                        <i class="mdui-list-item-icon iconfont icon-angle-down"></i>
-                    </div>
-                </div>
-                <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
-                    
-                        <a href="https://garybear.cn/hexo-theme-meadow/" target="_blank" rel="noopener" class="mdui-list-item mdui-ripple">
-                            Meadow说明文档
-                        </a>
-                    
-                </ul>
-            </li>
-        </ul>
-
-    </div>
-
-    <div class="mdui-divider"></div>
-    
-    
-</aside>
-  
-  <main id="main-contain" class="mdui-container mdui-m-t-5">
-    <article id="article" class="mdui-card mdui-p-b-2 mdui-m-b-5">
-  <header class="mdui-card-media">
-    
-    
-      <div class="post-header"> 
-  <a class="post-header-title" href="/2020/05/24/%E6%89%8B%E5%86%99Promise/">手写Promise</a>
-  <div class="post-header-meta">
-    <span>
-      <span class="iconfont icon-calendar"></span>
-      发布于:&nbsp;2020-05-24
-    </span>
-    <span>
-      <span class="iconfont icon-calendar-check"></span>
-      更新于:&nbsp;2020-05-25
-    </span>
-    <span>
-      <span class="iconfont icon-folder"></span>
-      分类于:&nbsp;
-    </span>
-    
-      <span>
-        <span class="iconfont icon-eye"></span>
-        阅读次数:&nbsp;
-        <span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
-      </span>
-    
-  </div>
-</div>   
-    
-
-
-
-    
-    
-    <div class="mdui-card-menu">
-    
-      <button class="mdui-btn mdui-btn-icon mdui-text-color-teal" mdui-menu="{target: '#share_menu', align: 'right'}"><i class="iconfont icon-share"></i></button>
-      <ul class="mdui-menu" id="share_menu">
-        <li class="mdui-menu-item">
-          <a href="http://service.weibo.com/share/share.php?appkey=&title=手写Promise&url=http://qiang1010.github.io/2020/05/24/%E6%89%8B%E5%86%99Promise/&pic=http://qiang1010.github.io/null&searchPic=false&style=simple" target="_blank" class="mdui-ripple">分享到 Weibo</a>
-        </li>
-        <li class="mdui-menu-item">
-          <a href="https://twitter.com/intent/tweet?text=手写Promise&url=http://qiang1010.github.io/2020/05/24/%E6%89%8B%E5%86%99Promise/&via=强哥" target="_blank" class="mdui-ripple">分享到 Twitter</a>
-        </li>
-        <li class="mdui-menu-item">
-          <a href="https://www.facebook.com/sharer/sharer.php?u=http://qiang1010.github.io/2020/05/24/%E6%89%8B%E5%86%99Promise/" target="_blank" class="mdui-ripple">分享到 Facebook</a>
-        </li>
-        <li class="mdui-menu-item">
-          <a href="https://plus.google.com/share?url=http://qiang1010.github.io/2020/05/24/%E6%89%8B%E5%86%99Promise/" target="_blank" class="mdui-ripple">分享到 Google+</a>
-        </li>
-        <li class="mdui-menu-item">
-          <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://qiang1010.github.io/2020/05/24/%E6%89%8B%E5%86%99Promise/&title=手写Promise" target="_blank" class="mdui-ripple">分享到 LinkedIn</a>
-        </li>
-        <li class="mdui-menu-item">
-          <a href="http://connect.qq.com/widget/shareqq/index.html?site=笔记&title=手写Promise&summary=知识点整理&pics=http://qiang1010.github.io/null&url=http://qiang1010.github.io/2020/05/24/%E6%89%8B%E5%86%99Promise/" target="_blank" class="mdui-ripple">分享到 QQ</a>
-        </li>
-        <li class="mdui-menu-item">
-          <a href="https://telegram.me/share/url?url=http://qiang1010.github.io/2020/05/24/%E6%89%8B%E5%86%99Promise/&text=手写Promise" target="_blank" class="mdui-ripple">分享到 Telegram</a>
-        </li>
-      </ul>
-    
-  </div>
-  </header>
-  
-  
-  
-  
-  
-  <div class="mdui-card-content mdui-typo mdui-p-x-4">
-    <h2 id="史上最最最详细的手写Promise教程"><a href="#史上最最最详细的手写Promise教程" class="headerlink" title="史上最最最详细的手写Promise教程"></a>史上最最最详细的手写Promise教程</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line">class Promise&#123;</span><br><span class="line">  constructor(executor)&#123;</span><br><span class="line">    this.state &#x3D; &#39;pending&#39;;</span><br><span class="line">    this.value &#x3D; undefined;</span><br><span class="line">    this.reason &#x3D; undefined;</span><br><span class="line">    this.onResolvedCallbacks &#x3D; [];</span><br><span class="line">    this.onRejectedCallbacks &#x3D; [];</span><br><span class="line">    let resolve &#x3D; value &#x3D;&gt; &#123;</span><br><span class="line">      if (this.state &#x3D;&#x3D;&#x3D; &#39;pending&#39;) &#123;</span><br><span class="line">        this.state &#x3D; &#39;fulfilled&#39;;</span><br><span class="line">        this.value &#x3D; value;</span><br><span class="line">        this.onResolvedCallbacks.forEach(fn&#x3D;&gt;fn());</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    let reject &#x3D; reason &#x3D;&gt; &#123;</span><br><span class="line">      if (this.state &#x3D;&#x3D;&#x3D; &#39;pending&#39;) &#123;</span><br><span class="line">        this.state &#x3D; &#39;rejected&#39;;</span><br><span class="line">        this.reason &#x3D; reason;</span><br><span class="line">        this.onRejectedCallbacks.forEach(fn&#x3D;&gt;fn());</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    try&#123;</span><br><span class="line">      executor(resolve, reject);</span><br><span class="line">    &#125; catch (err) &#123;</span><br><span class="line">      reject(err);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  then(onFulfilled,onRejected) &#123;</span><br><span class="line">    &#x2F;&#x2F; onFulfilled如果不是函数，就忽略onFulfilled，直接返回value</span><br><span class="line">    onFulfilled &#x3D; typeof onFulfilled &#x3D;&#x3D;&#x3D; &#39;function&#39; ? onFulfilled : value &#x3D;&gt; value;</span><br><span class="line">    &#x2F;&#x2F; onRejected如果不是函数，就忽略onRejected，直接扔出错误</span><br><span class="line">    onRejected &#x3D; typeof onRejected &#x3D;&#x3D;&#x3D; &#39;function&#39; ? onRejected : err &#x3D;&gt; &#123; throw err &#125;;</span><br><span class="line">    let promise2 &#x3D; new Promise((resolve, reject) &#x3D;&gt; &#123;</span><br><span class="line">      if (this.state &#x3D;&#x3D;&#x3D; &#39;fulfilled&#39;) &#123;</span><br><span class="line">        &#x2F;&#x2F; 异步</span><br><span class="line">        setTimeout(() &#x3D;&gt; &#123;</span><br><span class="line">          try &#123;</span><br><span class="line">            let x &#x3D; onFulfilled(this.value);</span><br><span class="line">            resolvePromise(promise2, x, resolve, reject);</span><br><span class="line">          &#125; catch (e) &#123;</span><br><span class="line">            reject(e);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;, 0);</span><br><span class="line">      &#125;;</span><br><span class="line">      if (this.state &#x3D;&#x3D;&#x3D; &#39;rejected&#39;) &#123;</span><br><span class="line">        &#x2F;&#x2F; 异步</span><br><span class="line">        setTimeout(() &#x3D;&gt; &#123;</span><br><span class="line">          &#x2F;&#x2F; 如果报错</span><br><span class="line">          try &#123;</span><br><span class="line">            let x &#x3D; onRejected(this.reason);</span><br><span class="line">            resolvePromise(promise2, x, resolve, reject);</span><br><span class="line">          &#125; catch (e) &#123;</span><br><span class="line">            reject(e);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;, 0);</span><br><span class="line">      &#125;;</span><br><span class="line">      if (this.state &#x3D;&#x3D;&#x3D; &#39;pending&#39;) &#123;</span><br><span class="line">        this.onResolvedCallbacks.push(() &#x3D;&gt; &#123;</span><br><span class="line">          &#x2F;&#x2F; 异步</span><br><span class="line">          setTimeout(() &#x3D;&gt; &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">              let x &#x3D; onFulfilled(this.value);</span><br><span class="line">              resolvePromise(promise2, x, resolve, reject);</span><br><span class="line">            &#125; catch (e) &#123;</span><br><span class="line">              reject(e);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;, 0);</span><br><span class="line">        &#125;);</span><br><span class="line">        this.onRejectedCallbacks.push(() &#x3D;&gt; &#123;</span><br><span class="line">          &#x2F;&#x2F; 异步</span><br><span class="line">          setTimeout(() &#x3D;&gt; &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">              let x &#x3D; onRejected(this.reason);</span><br><span class="line">              resolvePromise(promise2, x, resolve, reject);</span><br><span class="line">            &#125; catch (e) &#123;</span><br><span class="line">              reject(e);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;, 0)</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;);</span><br><span class="line">    &#x2F;&#x2F; 返回promise，完成链式</span><br><span class="line">    return promise2;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-  </div>
-  <!--文末结束语-->
-  
-    <div style="text-align:center;color: #ccc;font-size:24px;"> --- 本文结束 <i class="iconfont icon-heartbeat" style="font-size:24px;"></i> The End --- </div>
-  
-  <!--页脚广告-->
-  
-  <div class="mdui-divider"></div>
-  
-  <nav>
-    
-    
-      <a rel="next" class="post-nav-item mdui-float-right" href="/2020/05/24/hello-world/">
-        <span>Hello World</span>
-        <i class="iconfont icon-angle-right"></i>
-      </a>
-    
-  </nav>
-</article>
-
-
-
-
-  <div class="toc-button"  style="z-index: 100;">
-    <button class="mdui-fab mdui-ripple mdui-color-teal" mdui-menu="{target: '#toc'}"><i class="iconfont icon-list"></i></button>
-    <ul class="mdui-menu" id="toc">
-      <li class="mdui-menu-item">
-        <a href="/2020/05/24/%E6%89%8B%E5%86%99Promise/" id="toc-header" class="mdui-ripple">文章目录</a>
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#史上最最最详细的手写Promise教程"><span class="toc-number">1.</span> <span class="toc-text">史上最最最详细的手写Promise教程</span></a></li></ol>
-      </li>
-    </ul>
-  </div>
-
-
-
-    <div id="comment" class="mdui-card mdui-p-a-2 mdui-m-b-5">
-      <div class="mdui-tab" mdui-tab>
-        
-          <a href="#comment-tab0" class="mdui-ripple">gitalk</a>
-        
-          <a href="#comment-tab1" class="mdui-ripple">livere</a>
-        
       </div>
+      <div class="column col-2 hide-lg">
+        <div class="book-post-info">
+  
+    <div class="book-post-meta">
+
+  <div class="author">
+
+    <!-- Author image -->
+    <div class="author-img">
       
-        <div id="comment-tab0" class="mdui-p-a-2">
-          <div id="gitalk-container"></div>
-<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
-<script>
-  var gitalk = new Gitalk({
-    clientID: '',
-    clientSecret: '',
-    repo: '',
-    owner: '',
-    admin: [''],
-    id:  md5(location.pathname) ,
-    distractionFreeMode: 'true',
-  });
-  gitalk.render('gitalk-container');
-</script>
-        </div>
+        <figure
+          class="avatar avatar-lg"
+          data-initial="强"
+          style="background-color: #3b4351;">
+        </figure>
       
-        <div id="comment-tab1" class="mdui-p-a-2">
-          <div id="lv-container" data-id="city" data-uid="">
-  <script type="text/javascript">
-    (function (d, s) {
-      var j, e = d.getElementsByTagName(s)[0];
-      if (typeof LivereTower === 'function') { return; }
-      j = d.createElement(s);
-      j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
-      j.async = true;
-      e.parentNode.insertBefore(j, e);
-    })(document, 'script');
-  </script>
-  <noscript>Please enable JavaScript to view the comments powered by LiveRe.</noscript>
+    </div>
+
+    <!-- Author title -->
+    <div class="author-title">
+      <div>强哥</div>
+      <div>2020-05-24</div>
+    </div>
+  </div>
+
+  
+
+  <div class="divider"></div>
 </div>
-        </div>
-      
-    </div>
-
-  </main>
-  <footer id="footer" class="mdui-text-center mdui-m-t-5 mdui-p-b-2 mdui-p-t-4 mdui-color-theme">
-  <div class="mdui-container">
-    <div class="mdui-row">
-      
-        <a href="http://www.beian.miit.gov.cn" rel="noopener" target="_blank"></a>
-      
-      <span>
-        &copy; 2015 - 2020 
-        
-          <span style="color:#d9333f" class="iconfont icon-heart"></span>
-        
-        强哥
-      </span>
-    </div>
-    <div class="mdui-row">
-      
-        <div class="mdui-col-xs-6 mdui-text-right">
-          <span>Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a></span>
-        </div>
-        <div class="mdui-col-xs-6 mdui-text-left">
-          <span>Theme: <a href="https://github.com/kb1000fx/Meadow" rel="noopener" target="_blank">Meadow</a></span>
-        </div>
-      
-    </div>
-    <div class="mdui-row">
-      
-        <div class="mdui-col-xs-6 mdui-text-right">
-          <span id="busuanzi_container_site_uv" style="display: none;"> <span class="iconfont icon-user"></span>总访客量 <span id="busuanzi_value_site_uv"></span></span>
-        </div>
-        <div class="mdui-col-xs-6 mdui-text-left">
-          <span id="busuanzi_container_site_pv" style="display: none;"> <span class="iconfont icon-eye"></span>总访问量 <span id="busuanzi_value_site_pv"></span></span>
-        </div>
-      
-    </div>
- </div>
-</footer>
-  
-  <button id="gotop" class="mdui-fab mdui-fab-fixed mdui-fab-hide mdui-ripple mdui-color-teal" style="z-index:100;"><i class="iconfont icon-arrowup"></i></button>
-  
   
 
-    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <div class="book-tocbot">
+</div>
+<div class="book-tocbot-menu">
+  <a class="book-toc-expand" onclick="expand_toc()">Expand all</a>
+  <a onclick="go_top()">Back to top</a>
+  <a onclick="go_bottom()">Go to bottom</a>
+</div>
 
 
+<script src="/js/book-toc.js"></script>
 
-
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.8/dist/mermaid.min.js"></script>
-    <script>mermaid.initialize({
-        startOnLoad: true,
-        theme: "default"
-    });</script>
-
-
-
-
-<script src="/js/mdui.min.js"></script>
-<script src="/js/meadow.js"></script>
+</div>
+      </div>
+    </div>
+  </div>
+  
+  <a class="off-canvas-overlay" onclick="hide_canvas()"></a>
+</div>
 
 </body>
-</html >
+</html>
+
+
+<script src="/js/book.js"></script>
